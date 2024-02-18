@@ -17,12 +17,20 @@ void sort_list(pNode pHead);
 
 int main(void) {
 	pNode pHead = NULL;
+	int val;
 
 	pHead = create_list();
 	traverse_list(pHead);
 
 	insert_list(pHead, 4, 33);
 	traverse_list(pHead);
+
+	if (delete_list(pHead, 4, &val)) {
+		printf("É¾³ýµÄÊý¾ÝÊÇ£º%d\n", val);
+		traverse_list(pHead);
+	}
+	else
+		printf("É¾³ýÊ§°Ü£¡\n");
 
 	/*if (is_empty(pHead))
 		printf("Á´±íÎª¿Õ£¡\n");
@@ -137,5 +145,26 @@ void sort_list(pNode pHead) {
 }
 
 bool delete_list(pNode pHead, int pos, int* val) {
+	if (pos > length_list(pHead) || pos < 1)
+		return false;
 
+	int count = 1;
+	pNode pTemp = pHead;
+
+	while (count < pos) {
+		pTemp = pTemp->pNext;
+		count++;
+	}
+	pNode pNew = (pNode)malloc(sizeof(Node));
+	if (pNew == NULL) {
+		printf("·ÖÅäÊ§°Ü£¬³ÌÐòÖÕÖ¹£¡\n");
+		exit(-1);
+	}
+	pNew = pTemp->pNext;
+	pTemp->pNext = pTemp->pNext->pNext;
+	*val = pNew->data;
+	free(pNew);
+	pNew = NULL;
+
+	return true;
 }
